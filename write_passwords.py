@@ -8,10 +8,10 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 
-def generate_password(len, message):
+def generate_password(len, message, sym, num, lower, upper):
     """
-    Generates a password given a length between 1-50, then updates a ttk.Label with
-    the password or an error message.
+    Generates a password given a length between 1-50 and booleans indicating which
+    characters to include, then updates a ttk.Label with the password or an error message.
 
     Effects:
         Modifies window (ttk.Label)
@@ -23,16 +23,33 @@ def generate_password(len, message):
     Args: 
         len: Str
         message: ttk.Label (must be valid, not asserted)
+        sym, num, lower, upper: Bool
     
     Time: 
         O(n), where n is the integer represented in len
     """
+
+    if ((sym == False) and (num == False) and (lower == False) and (upper == False)):
+        print("YIKES")
+        message['text'] = "ALL CHARACTERS EXCLUDED"
+        message.pack()
+        return
 
     lowercase = list(string.ascii_lowercase) # lowercase characters list
     uppercase = list(string.ascii_uppercase) # uppercase characters list
     numbers = list(string.digits) # digits characters list
     punctuation = list(string.punctuation) # punctuation characters list
 
+    choices = "" # string containing all possible characters for selection
+    if (sym == True):
+        choices += string.punctuation
+    if (num == True):
+        choices += string.digits
+    if (lower == True):
+        choices += string.ascii_lowercase
+    if (upper == True):
+        choices += string.ascii_uppercase
+        
     password = ""
 
     try:
@@ -46,16 +63,9 @@ def generate_password(len, message):
         message.pack()
         return
 
+    choices = list(choices) # Change string into list
     for i in range(pass_len) :
-        typ = random.randint(0,3)
-        if (typ == 0):
-            password += (random.choice(lowercase))
-        if (typ == 1):
-            password += (random.choice(uppercase))
-        if (typ == 2):
-            password += (random.choice(numbers))
-        if (typ == 3):
-            password += (random.choice(punctuation))
+        password += (random.choice(choices)) # Add characters
     
     message['text'] = password
     message.pack()
@@ -121,7 +131,7 @@ def find_password(name, label):
 
     for line in passwords:
         print((''.join(line.split()[0:-1])).upper())
-        if ((''.join((line.split()[0:-1])).upper()) == name.upper()):
+        if ((' '.join((line.split()[0:-1])).upper()) == name.upper()):
             passwords.close()
             print("FIND_PASSWORD: SUCCESS")
             try: 
@@ -155,8 +165,6 @@ def delete_password(name, label, entries, position):
         entries: tk.Labellist (must be valid, not asserted)
         position: Int (must represent position on entries, not asserted)
     
-    Time: 
-        O(n), where n is the number of passwords in log.txt
     """
 
     passwords = open("log.txt", 'r')

@@ -28,6 +28,7 @@ t.configure('big.TButton', font=('Calibri','16')) # Button font
 ########################################################
 # Header (ttk.Label, Static)
 ttk.Label(start_page, text="PyPass", font=("Calibri", 45)).pack()
+ttk.Label(start_page, text="Enter Password:", font=("Calibri", 20)).pack()
 
 # Password Entry (ttk.Entry, Dynamic)
 password_login = ttk.Entry(start_page, textvariable=tk.StringVar()) 
