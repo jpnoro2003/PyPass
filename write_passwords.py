@@ -166,7 +166,7 @@ def delete_password(name, label, entries, position):
         position: Int (must represent position on entries, not asserted)
     
     """
-
+    print("PASSWORD LABEL: " + name)
     passwords = open("log.txt", 'r')
     lines = passwords.readlines()
     passwords.close()
@@ -174,7 +174,7 @@ def delete_password(name, label, entries, position):
     passwords = open("log.txt", 'w')
 
     for line in lines:
-        if not ((''.join((line.split()[0:-1])).upper()) == name.upper()): #line.startswith(name.upper())
+        if not ((' '.join((line.split()[0:-1])).upper()) == name.upper()): #line.startswith(name.upper())
             passwords.write(line)
         else:
             success = True

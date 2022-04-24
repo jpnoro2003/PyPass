@@ -61,17 +61,18 @@ root = tk.Tk() # initialize window
 root.title("PyPass") # Set window title
 
 window_width = 800 # Update window elements
-window_height = 700
+window_height = 600
 root.geometry(f'{window_width}x{window_height}')
-root.resizable(0,0)
+#root.resizable(0,0)
 root.iconbitmap('icon_i8Q_icon.ico')
 ########################################################
 tabControl = ttk.Notebook(root) # Create notebook for tabs
 
 s = ttk.Style() # Setting up styles
-s.configure('TNotebook.Tab', font=('Calibri','16')) # Notebook tab font
-s.configure('.', background= "#D4F1F4") # Background color
+s.configure('TNotebook.Tab', font=('Calibri','16'), background = "Slategray3") # Notebook tab font
+s.configure('.', background= "Slategray3") # Background color
 s.configure('big.TButton', font=('Calibri','16')) # Button font
+s.map("TNotebook", background= [("selected", "Slategray3")])
 
 generate_tab = ttk.Frame(tabControl) # Generate tab
 tabControl.add(generate_tab, text ='Generate Password')
@@ -89,6 +90,7 @@ tabControl.pack(expand = True, fill="both") # Initialize Tabs
 ########################################################
 # GENERATE PASSWORD TAB
 ########################################################
+
 # Generate Password (ttk.Label, Static)
 ttk.Label(generate_tab, text="Generate Password", font=("Calibri", 35)).pack() 
 
@@ -97,8 +99,8 @@ password_text = ttk.Label(generate_tab, text="Please Enter a number between 1-50
                             font=("Calibri", 20), padding=20) 
 password_text.pack()
 
-# Enter length label (ttk.Label, Static)
-length_frame = tk.Frame(generate_tab, background="#D4F1F4")
+# Enter length label (tk.Frame, Static)
+length_frame = tk.Frame(generate_tab, background="#A1B5D8")
 length_frame.pack()
 
 ttk.Label(length_frame, text="Enter length here (1-50):  ", font=("Calibri", 15)).pack(side = LEFT)
@@ -108,9 +110,9 @@ password_length = ttk.Entry(length_frame, textvariable=tk.StringVar())
 password_length.pack(side = LEFT)
 
 # Frame for Checkboxes (tk.Frame, Static)
-options_frame_top = tk.Frame(generate_tab, background="#D4F1F4")
+options_frame_top = tk.Frame(generate_tab, background="#A1B5D8")
 options_frame_top.pack()
-options_frame_bot = tk.Frame(generate_tab, background="#D4F1F4")
+options_frame_bot = tk.Frame(generate_tab, background="#A1B5D8")
 options_frame_bot.pack()
 
 # Checkboxes for password options (ttk.Checkbutton, Dynamic)
@@ -137,6 +139,7 @@ ttk.Button(generate_buttons_frame, text='New Password', style='big.TButton',
 ttk.Button(generate_buttons_frame, text="Copy Password", style='big.TButton',
             command=lambda: copy_text(password_text['text'])).pack(side = LEFT) 
 
+#######################################
 # Save Password (ttk.Label, Static)
 ttk.Label(generate_tab, text="Save Password", font=("Calibri", 35)).pack()
 
@@ -145,22 +148,27 @@ password_add_text = ttk.Label(generate_tab, text="Enter the label and password b
 password_add_text.pack()
 
 # Enter label (ttk.Label, Static)
-ttk.Label(generate_tab, text="Enter label here:", font=("Calibri", 15)).pack()
+save_label_frame = tk.Frame(generate_tab, background="#A1B5D8")
+ttk.Label(save_label_frame, text="Enter label here:   ", font=("Calibri", 15)).pack(side = LEFT)
 
 # Enter label for password here (ttk.Entry, Dynamic)
-password_add_label = ttk.Entry(generate_tab, textvariable=tk.StringVar())
-password_add_label.pack()
+password_add_label = ttk.Entry(save_label_frame, textvariable=tk.StringVar())
+password_add_label.pack(side = RIGHT)
+save_label_frame.pack()
 
 # Enter password (ttk.Label, Static)
-ttk.Label(generate_tab, text="Enter password here (no spaces allowed):", font=("Calibri", 15)).pack()
+save_pass_frame = tk.Frame(generate_tab, background="#A1B5D8")
+ttk.Label(save_pass_frame, text="Enter password here (no spaces allowed):   ", font=("Calibri", 15)).pack(side = LEFT)
 
 # Enter password here (ttk.Entry, Dynamic)
-password_add_val = ttk.Entry(generate_tab, textvariable=tk.StringVar()) 
-password_add_val.pack()
+password_add_val = ttk.Entry(save_pass_frame, textvariable=tk.StringVar()) 
+password_add_val.pack(side = RIGHT)
+save_pass_frame.pack()
 
 # Add password (ttk.Button, Dynamic)
 ttk.Button(generate_tab, text='Add Password', style='big.TButton',
             command=lambda: add_password(password_add_label.get(), password_add_val.get(), password_add_text, password_list)).pack()
+
 ########################################################
 # SAVE PASSWORD TAB
 ########################################################
@@ -226,10 +234,7 @@ master_pass_status.pack()
 ttk.Label(help_tab, text="Generate Password", font=("Calibri", 30)).pack()
 ttk.Label(help_tab, text="For the password length, enter a number between 1-50 inclusive.", font=("Calibri", 15)).pack()
 ttk.Label(help_tab, text="To copy the password, press the Copy Password button.", font=("Calibri", 15)).pack()
-
-# Save password section (ttk.Label, Static)
-ttk.Label(help_tab, text="Save Password", font=("Calibri", 30)).pack()
-ttk.Label(help_tab, text="Your password label may consist of any character with multiple words.", font=("Calibri", 15)).pack()
+ttk.Label(help_tab, text="Your password label may consist of any ASCII character and can contain multiple words.", font=("Calibri", 15)).pack()
 ttk.Label(help_tab, text="Any whitespace at the beginning is ignored.", font=("Calibri", 15)).pack()
 ttk.Label(help_tab, text="Your password may not contain any whitespace.", font=("Calibri", 15)).pack()
 
@@ -239,7 +244,11 @@ ttk.Label(help_tab, text="Click on any label on the list to view its password.",
 ttk.Label(help_tab, text="Press the Copy Password button to copy it to your clipboard.", font=("Calibri", 15)).pack()
 ttk.Label(help_tab, text="Press the Delete Password button to delete it.", font=("Calibri", 15)).pack()
 
-
+# Save password section (ttk.Label, Static)
+ttk.Label(help_tab, text="Change Master Password", font=("Calibri", 30)).pack()
+ttk.Label(help_tab, text="Your password label may consist of any ASCII character and can contain multiple words.", font=("Calibri", 15)).pack()
+ttk.Label(help_tab, text="Any whitespace at the beginning is ignored.", font=("Calibri", 15)).pack()
+ttk.Label(help_tab, text="Your password may not contain any whitespace.", font=("Calibri", 15)).pack()
 ########################################################
 def main_loop():
     """

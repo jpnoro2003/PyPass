@@ -1,9 +1,26 @@
+# This program implements the main screen for PyPass.
+
 import tkinter as tk
 from tkinter import ttk
 from ctypes import windll
 from security import validate
 ########################################################
 def login(password, label):
+    """
+    Determines if the provided password is valid, then opens the main window
+
+    Effects:
+        Closes current window and opens new window
+        Potentially modifies current window (ttk.Label)
+    
+    Return:
+        Does not return any value
+    
+    Args:
+        password: Str
+        label: ttk.Label
+    """
+
     if (validate(password) == 1):
         start_page.destroy()
         from PyPass import main_loop
@@ -20,10 +37,10 @@ window_height = 450
 start_page.geometry(f'{window_width}x{window_height}')
 start_page.resizable(0,0)
 start_page.iconbitmap('icon_i8Q_icon.ico')
-start_page.configure(bg="#D4F1F4")
+start_page.configure(bg="Slategray3")
 
 t = ttk.Style()
-t.configure('.', background="#D4F1F4") # Label background
+t.configure('.', background="Slategray3") # Label background
 t.configure('big.TButton', font=('Calibri','16')) # Button font
 ########################################################
 # Header (ttk.Label, Static)
@@ -41,6 +58,8 @@ ttk.Button(start_page, text='Login', style='big.TButton',
 # Error Text (ttk.Label, Dynamic)
 error = ttk.Label(start_page, text = '', font=("Calibri", 25))
 error.pack()
+
+ttk.Label(start_page, text = 'Note that the default password is \'123\'.\n Please change at your own discretion.', font=("Calibri", 15)).pack()
 ########################################################    
 try:
     # modify DpiAwareness to improve readability of text
